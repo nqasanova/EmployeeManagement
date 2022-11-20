@@ -1,0 +1,45 @@
+﻿@model List<EmployeeManagement.ViewModels.Employee.ListViewModel>
+
+<div class="container">
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">EmployeeCode</th>
+                <th scope="col">FirstName</th>
+                <th scope="col">LastName</th>
+                <th scope="col">FatherName</th>
+                <th scope="col">
+                    <div class="">
+                        <a asp-route="Employee-add" target="_blank" class="btn btn-secondary">Add Employee</a>
+                    </div>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var employee in Model)
+            {
+                @if (employee.IsDeleted == false)
+                {
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>@employee.EmployeeCode</td>
+                        <td>@employee.FirstName</td>
+                        <td>@employee.LastName</td>
+                        <td>@employee.FatherName</td>
+                        <td>
+                            <div class="">
+                                <a asp-route="Employee-edit-info" asp-route-workerCode="@employee.EmployeeCode" class="btn btn-secondary btn-warning">Edit Employee</a>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="">
+                                <a asp-route="Employee-delete" asp-route-workerCode="@employee.EmployeeCode" class="btn btn-secondary btn-danger">Delete Employee</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
