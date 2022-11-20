@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using EmployeeManagement.Validations;
 
 namespace EmployeeManagement.ViewModels.Employee
 {
@@ -24,18 +25,23 @@ namespace EmployeeManagement.ViewModels.Employee
         [EmailAddress]
         public string Email { get; set; }
 
+        [Required]
+        [FINValidation(ErrorMessage = "Employee's FIN code must consist of only letters, numbers, and 7 characters!")]
+        public string FIN { get; set; }
+
         public EditViewModel()
         {
 
         }
 
-        public EditViewModel(string employeeCode, string firstName, string lastName, string fatherName, string email)
+        public EditViewModel(string employeeCode, string firstName, string lastName, string fatherName, string email, string fin)
         {
             EmployeeCode = employeeCode;
             FirstName = firstName;
             LastName = lastName;
             FatherName = fatherName;
             Email = email;
+            FIN = fin;
         }
     }
 }
