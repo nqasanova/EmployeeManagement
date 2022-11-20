@@ -1,46 +1,32 @@
 ﻿@model List<EmployeeManagement.ViewModels.Employee.ListViewModel>
 
-<div class="container">
-    <table class="table">
-        <thead class="thead-dark">
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">EmployeeCode</th>
-                <th scope="col">FirstName</th>
-                <th scope="col">LastName</th>
-                <th scope="col">FatherName</th>
-                <th scope="col">
-                    <div class="">
-                        <a asp-route="Employee-add" target="_blank" class="btn btn-secondary">Add Employee</a>
-                    </div>
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var employee in Model)
+<table class="table">
+    <a asp-route="Employee-add" target="_blank" class="btn btn-secondary">Add Employee</a>
+
+    <thead>
+        <tr>
+            <th scope="col">EmployeeCode</th>
+            <th scope="col">FirstName</th>
+            <th scope="col">LastName</th>
+            <th scope="col">FatherName</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var employeeModels in Model)
+        {
+            @if (employeeModels.IsDeleted == false)
             {
-                @if (employee.IsDeleted == false)
-                {
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>@employee.EmployeeCode</td>
-                        <td>@employee.FirstName</td>
-                        <td>@employee.LastName</td>
-                        <td>@employee.FatherName</td>
-                        <td>
-                            <div class="">
-                                <a asp-route="Employee-edit-info" asp-route-workerCode="@employee.EmployeeCode" class="btn btn-secondary btn-warning">Edit Employee</a>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="">
-                                <a asp-route="Employee-delete" asp-route-workerCode="@employee.EmployeeCode" class="btn btn-secondary btn-danger">Delete Employee</a>
-                            </div>
-                        </td>
-                    </tr>
-                }
+                <tr>
+                    <th scope="row">@employeeModels.EmployeeCode</th>
+                    <td>@employeeModels.FirstName</td>
+                    <td>@employeeModels.LastName</td>
+                    <td>@employeeModels.FatherName</td>
+                    <td>
+                        <a asp-route="Employee-delete" asp-route-empcode="@employeeModels.EmployeeCode" class="btn btn-secondary">Delete Employee</a>
+                        <a asp-route="Employee-edit-employeeCode" asp-route-empcode="@employeeModels.EmployeeCode" target="_blank" class="btn btn-secondary">Update Employee</a>
+                    </td>
+                </tr>
             }
-        </tbody>
-    </table>
-</div>
+        }
+    </tbody>
+</table>
