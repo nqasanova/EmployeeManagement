@@ -15,7 +15,7 @@ public class Program
 
         app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=employee}/{action=list}");
+                pattern: "{controller=Employee}/{action=List}");
 
         app.Run();
     }
