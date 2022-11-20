@@ -1,6 +1,7 @@
 ﻿using System;
 using EmployeeManagement.Contexts;
 using EmployeeManagement.Database.Models;
+using EmployeeManagement.Migrations;
 using EmployeeManagement.ViewModels.Employee;
 using Microsoft.AspNetCore.Mvc;
 
@@ -53,24 +54,27 @@ namespace EmployeeManagement.Controllers
             using DataContext dbcontext = new DataContext();
             var employees = dbcontext.Employees.ToList();
 
-            var model = employees.Select(e => new ListViewModel(e.EmployeeCode, e.FirstName, e.LastName, e.FatherName, e.IsDeleted))
-            .ToList();
+            var model = employees.Select(e => new ListViewModel(e.EmployeeCode, e.FirstName, e.LastName, e.FatherName, e.IsDeleted)).ToList();
             return View(model);
         }
         #endregion
 
         #region Edit
 
-        [HttpGet("Edit/{EmployeeCode}", Name = "Employee-edit-info")]
-        public ActionResult Edit(string EmployeeCode)
+        [HttpGet("Edit/{employeeCode}", Name = "Employee-edit-info")]
+        public ActionResult Edit(string employeeCode)
         {
             using DataContext dbcontext = new DataContext();
-            var employees = dbcontext.Employees.FirstOrDefault(e => e.EmployeeCode == EmployeeCode);
+            var employee = dbcontext.Employees.FirstOrDefault(e => e.EmployeeCode == employeeCode);
 
 
-            return View(
-                new EditViewModel
-                (employees.EmployeeCode, employees.FirstName, employees.LastName, employees.FatherName, employees.Email));
+            if (employee == null && employee.IsDeleted == true)
+            {
+                return NotFound();
+            }
+
+            var pastEmployee = new EditViewModel(employee.EmployeeCode, employee.FirstName, employee.LastName, employee.FatherName, employee.Email, employee.FIN);
+            return View("~/Views/Employees/Edit.cshtml", pastEmployee);
         }
 
         [HttpPost("Edit", Name = "Employee-edit")]
@@ -79,20 +83,21 @@ namespace EmployeeManagement.Controllers
             using DataContext dbcontext = new DataContext();
             var employees = dbcontext.Employees.FirstOrDefault(e => e.EmployeeCode == model.EmployeeCode);
 
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
             if (employees is null)
             {
                 return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
             }
 
             employees.FirstName = model.FirstName;
             employees.LastName = model.LastName;
             employees.FatherName = model.FatherName;
             employees.Email = model.Email;
+
             dbcontext.SaveChanges();
             return RedirectToAction(nameof(List));
         }
@@ -100,19 +105,19 @@ namespace EmployeeManagement.Controllers
 
         #region Delete
 
-        [HttpGet("Delete/{EmployeeCode}", Name = "Employee-delete")]
+        [HttpGet("delete/{EmployeeCode}", Name = "Employee-delete")]
         public ActionResult Delete(string EmployeeCode)
         {
             using DataContext dbcontext = new DataContext();
-            var employees = dbcontext.Employees.FirstOrDefault(e => e.EmployeeCode == EmployeeCode);
+            var workers = dbcontext.Employees.FirstOrDefault(w => w.EmployeeCode == EmployeeCode);
 
-            if (employees is null)
+
+            if (workers is null)
             {
                 return NotFound();
             }
 
-            employees.IsDeleted = true;
-
+            workers.IsDeleted = true;
             dbcontext.SaveChanges();
             return RedirectToAction(nameof(List));
         }
