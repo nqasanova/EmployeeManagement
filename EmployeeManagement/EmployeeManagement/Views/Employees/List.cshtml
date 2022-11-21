@@ -1,32 +1,37 @@
 ﻿@model List<EmployeeManagement.ViewModels.Employee.ListViewModel>
 
-<table class="table">
-    <a asp-route="Employee-add" target="_blank" class="btn btn-secondary">Add Employee</a>
-
-    <thead>
-        <tr>
-            <th scope="col">EmployeeCode</th>
-            <th scope="col">FirstName</th>
-            <th scope="col">LastName</th>
-            <th scope="col">FatherName</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var employeeModels in Model)
-        {
-            @if (employeeModels.IsDeleted == false)
-            {
+<div class="container">
+    <div class="row justify-content-end">
+        <div class="">
+            <a asp-route="employee-add" target="_blank" class="btn btn-secondary">Add New Employee</a>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <table class="table">
+            <thead>
                 <tr>
-                    <th scope="row">@employeeModels.EmployeeCode</th>
-                    <td>@employeeModels.FirstName</td>
-                    <td>@employeeModels.LastName</td>
-                    <td>@employeeModels.FatherName</td>
-                    <td>
-                        <a asp-route="Employee-delete" asp-route-empcode="@employeeModels.EmployeeCode" class="btn btn-secondary">Delete Employee</a>
-                        <a asp-route="Employee-edit-employeeCode" asp-route-empcode="@employeeModels.EmployeeCode" target="_blank" class="btn btn-secondary">Update Employee</a>
-                    </td>
+                    <th scope="col">Employee Code</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Father Name</th>
+                    <th scope="col"></th>
                 </tr>
-            }
-        }
-    </tbody>
-</table>
+            </thead>
+            <tbody>
+                @foreach (var employeeModels in Model)
+                {
+                    <tr>
+                        <th scope="row">@employeeModels.EmployeeCode</th>
+                        <td>@employeeModels.FirstName</td>
+                        <td>@employeeModels.LastName</td>
+                        <td>@employeeModels.FatherName</td>
+                        <td class="d-flex justify-content-between">
+                            <a asp-route="employee-delete" asp-route-employeeCode="@employeeModels.EmployeeCode class="col-3 btn btn-primary">Delete Employee</a>
+                            <a asp-route="employee-edit-employeeCode" asp-route-employeeCode="@employeeModels.EmployeeCode" target="_blank" class="col-3 btn btn-secondary">Edit Employee</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
