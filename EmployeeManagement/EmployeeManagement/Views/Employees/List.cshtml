@@ -19,19 +19,22 @@
             </thead>
             <tbody>
                 @foreach (var employeeModels in Model)
-                {
-                    <tr>
-                        <th scope="row">@employeeModels.EmployeeCode</th>
-                        <td>@employeeModels.FirstName</td>
-                        <td>@employeeModels.LastName</td>
-                        <td>@employeeModels.FatherName</td>
-                        <td class="d-flex justify-content-between">
-                            <a asp-route="employee-delete" asp-route-employeeCode="@employeeModels.EmployeeCode class="col-3 btn btn-primary">Delete Employee</a>
-                            <a asp-route="employee-edit-employeeCode" asp-route-employeeCode="@employeeModels.EmployeeCode" target="_blank" class="col-3 btn btn-secondary">Edit Employee</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
+                    {
+                    @if (employeeModels.IsDeleted == false)
+                        {
+                        <tr>
+                            <th scope="row">@employeeModels.EmployeeCode</th>
+                            <td>@employeeModels.FirstName</td>
+                            <td>@employeeModels.LastName</td>
+                            <td>@employeeModels.FatherName</td>
+                            <td class="d-flex justify-content-between">
+                                <a asp-route="employee-delete" asp-route-employeeCode="@employeeModels.EmployeeCode" class="col-3 btn btn-secondary">Delete Employee</a>
+                                <a asp-route="employee-edit-employeeCode" asp-route-employeeCode="@employeeModels.EmployeeCode" target="_blank" class="col-3 btn btn-secondary">Edit Employee</a>
+                            </td>
+                        </tr>
+                        }
+                    }
+                </tbody>
         </table>
     </div>
 </div>
