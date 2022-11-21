@@ -25,8 +25,8 @@ namespace EmployeeManagement.ViewModels.Employee
         [EmailAddress]
         public string Email { get; set; }
 
-        [Required]
         [FINValidation(ErrorMessage = "Employee's FIN code must consist of only letters, numbers, and 7 characters!")]
+        [Required]
         public string FIN { get; set; }
 
         public EditViewModel()
