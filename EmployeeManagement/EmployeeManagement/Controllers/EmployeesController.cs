@@ -11,32 +11,32 @@ namespace EmployeeManagement.Controllers
     public class EmployeesController : Controller
     {
         #region Add
-        [HttpGet("Add", Name = "Employee-add")]
+        [HttpGet("Add", Name = "employee-add")]
         public ActionResult Add()
         {
             return View();
         }
 
 
-        [HttpPost("Add", Name = "Employee-add")]
-        public ActionResult Add(AddViewModel model)
+        [HttpPost("Add", Name = "employee-add")]
+        public ActionResult Add(AddViewModel addedModel)
         {
-            using DataContext dbcontext = new DataContext();
 
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return View("~/Views/Employees/Add.cshtml");
             }
 
+            using DataContext dbcontext = new DataContext();
 
-            dbcontext.Employees.Add(new Database.Models.Employee
+            dbcontext.Employees.Add(new Employee
             {
-                EmployeeCode = EmployeePKGenerator.EmployeeCode,
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                FatherName = model.FatherName,
-                Email = model.Email,
-                FIN = model.FIN,
+                EmployeeCode = EmployeePKGenerator.randomEmployeeCode,
+                FirstName = addedModel.FirstName,
+                LastName = addedModel.LastName,
+                FatherName = addedModel.FatherName,
+                Email = addedModel.Email,
+                FIN = addedModel.FIN,
                 IsDeleted = default
             });
 
@@ -48,20 +48,19 @@ namespace EmployeeManagement.Controllers
 
         #region List
 
-        [HttpGet("List", Name = "Employee-list")]
+        [HttpGet("List", Name = "employee-list")]
         public IActionResult List()
         {
             using DataContext dbcontext = new DataContext();
-            var employees = dbcontext.Employees.ToList();
 
-            var model = employees.Select(e => new ListViewModel(e.EmployeeCode, e.FirstName, e.LastName, e.FatherName, e.IsDeleted)).ToList();
+            var model = dbcontext.Employees.Select(e => new ListViewModel(e.EmployeeCode, e.FirstName, e.LastName, e.FatherName, e.IsDeleted)).ToList();
             return View("~/Views/Employees/List.cshtml", model);
         }
         #endregion
 
         #region Edit
 
-        [HttpGet("Edit/{employeeCode}", Name = "Emloyee-edit-employeeCode")]
+        [HttpGet("Edit/{employeeCode}", Name = "employee-edit-employeeCode")]
         public ActionResult Edit(string employeeCode)
         {
             using DataContext dbContext = new DataContext();
@@ -76,7 +75,7 @@ namespace EmployeeManagement.Controllers
             return View("~/Views/Employees/Edit.cshtml", pastEmployee);
         }
 
-        [HttpPost("Edit", Name = "Employee-edit")]
+        [HttpPost("Edit", Name = "employee-edit")]
         public ActionResult Edit(EditViewModel newModel)
         {
             using DataContext dbContext = new DataContext();
@@ -104,19 +103,19 @@ namespace EmployeeManagement.Controllers
 
         #region Delete
 
-        [HttpGet("Delete/{employeeCode}", Name = "Employee-delete")]
+        [HttpGet("Delete/{employeeCode}", Name = "employee-delete")]
         public ActionResult Delete(string employeeCode)
         {
             using DataContext dbcontext = new DataContext();
-            var employees = dbcontext.Employees.FirstOrDefault(e => e.EmployeeCode == employeeCode);
+            var employee = dbcontext.Employees.FirstOrDefault(e => e.EmployeeCode == employeeCode);
 
 
-            if (employees is null)
+            if (employee is null)
             {
                 return NotFound();
             }
 
-            employees.IsDeleted = true;
+            employee.IsDeleted = true;
             dbcontext.SaveChanges();
             return RedirectToAction(nameof(List));
         }
