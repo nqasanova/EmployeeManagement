@@ -109,7 +109,6 @@ namespace EmployeeManagement.Controllers
             using DataContext dbcontext = new DataContext();
             var employee = dbcontext.Employees.FirstOrDefault(e => e.EmployeeCode == employeeCode);
 
-
             if (employee is null)
             {
                 return NotFound();
